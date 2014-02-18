@@ -1,7 +1,10 @@
 var http = require('http');
+var urlparser = require('url');
+var htmlparser = require('htmlparser2')
 
 function download(url, callback) {
-  http.get({hostname:url}, function(res) {
+  url = urlparser.parse(url)
+  http.get({hostname:url.hostname, path:url.path}, function(res) {
     data = ""
     res.on('data', function(chunk) {
       data += chunk
@@ -13,20 +16,20 @@ function download(url, callback) {
 }
 
 function ac(url) {
-  if (url.substring(0,"http://".length) === "http://") {
-    url = url.substring("http://".length)
-  }
   download(url, function(data) {
-    console.log(data)
+    var parse = new htmlparser.Parser({
+      onopentag: function (name, attribs) {
+        if (name === "link" && attribs.type === "text/css") {
+          console.log(attribs.href);
+        }
+      }
+    })
+    parse.write(data)
+    parse.end()
   })
 }
 
-if (typeof(process.argv) != "undefined") {
-  if(typeof(process.argv[2]) != "undefined") {
-    ac(process.argv[2])
-  }
-  else {
-    console.log("provide an http location")
-  }
+module.exports = {
+  download: download,
+  ac: ac
 }
-
