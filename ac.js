@@ -22,10 +22,25 @@ function download(url, callback) {
 
 function ac(url) {
   download(url, function(data) {
+    var instyle = false;
     var parse = new htmlparser.Parser({
       onopentag: function (name, attribs) {
         if (name === "link" && (attribs.rel === "stylesheet" || attribs.type === "text/css")) {
           console.log(attribs.href);
+        }
+        if (name === "style") {
+          console.log("{{on-page style data}}")
+          instyle = true;
+        }
+      },
+      ontext: function(data) {
+        if (instyle)  {
+          console.log(data)
+        }
+      },
+      onclosetag: function(name)  {
+        if(name==="style")  {
+          instyle = false;
         }
       }
     })
