@@ -31,7 +31,6 @@ function ac(url) {
     })
     parse.write(data)
     parse.end()
-    console.log(data)
   })
 }
 
