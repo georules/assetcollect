@@ -61,9 +61,11 @@ function ac(url) {
 
     var promises = []
     todownload.forEach(function(url,i) {
-      promises.push(download(url).then(function(data){
-        cssdata[i] = "/* {{"+url+"}} */\n" + data
-      }))
+      if(url !== "undefined") {
+        promises.push(download(url).then(function(data){
+          cssdata[i] = "/* {{"+url+"}} */\n" + data
+        }))
+      }
     })
     Promise.all(promises).then(function() {
       cssdata.forEach(function(data){
