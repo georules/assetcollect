@@ -15,7 +15,7 @@ function download(url) {
         console.log(e.message)
       })
       res.on('end', function() {
-        resolve(data)
+        resolve(data.toString("utf-8").replace(/[\uFEFF]/g , ""))
       })
     })
   })
@@ -67,7 +67,7 @@ function ac(url) {
     })
     Promise.all(promises).then(function() {
       cssdata.forEach(function(data){
-        console.log(data+"\n")
+        console.log((data+"\n").toString("utf-8"))
       })
     })
   })
