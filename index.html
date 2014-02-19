@@ -25,7 +25,7 @@
 var ac = require('./ac.js')
 $("#doit").click(function() {
 
-ac.download("http://www.corsproxy.com/" + $("#url").val(), function(data) {
+ac.download($("#url").val(), function(data) {
   $("#output").val(data) 
 })
 
